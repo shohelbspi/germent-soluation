@@ -1,0 +1,84 @@
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+      <div class="sidebar-brand">
+        <a href="index.html">FabTech</a>
+      </div>
+      <div class="sidebar-brand sidebar-brand-sm">
+        <a href="index.html">FabTech</a>
+      </div>
+
+      {% if request.user.user_type == '1' %}
+      <ul class="sidebar-menu">
+        <li>
+            <a class="nav-link" href="{% url "dashboard" %}">
+                <i class="fas fa-fire"></i>
+                 <span>Dashboard</span>
+            </a>
+        </li>
+        
+        <li class="menu-header">Create User</li>
+        <li>
+          <a class="nav-link" href="{% url "user_list" %}">
+            <i class="far fa-square"></i>
+            <span>User Create</span>
+          </a>
+        </li>
+
+        <li class="menu-header">Fabric Order Create</li>
+        <li>
+          <a class="nav-link" href="{% url "order_list" %}">
+            <i class="far fa-square"></i>
+            <span>Order Create</span>
+          </a>
+        </li>
+
+        <li class="menu-header">Master Data</li>
+        <li class="dropdown">
+          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Master Data</span></a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link" href="{% url "buyer_list" %}">Buyer</a></li>
+            <li><a class="nav-link" href="">Unit</a></li>
+            <li><a class="nav-link" href="">Machine</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+      {% endif %}
+
+
+
+      {% if request.user.user_type == '2' %}
+      <ul class="sidebar-menu">
+        <li>
+            <a class="nav-link" href="{% url "dashboard" %}">
+                <i class="fas fa-fire"></i>
+                 <span>Dashboard</span>
+            </a>
+        </li>
+        
+
+        <li class="menu-header">Fabric Order Create</li>
+        <li>
+          <a class="nav-link" href="{% url "order_list" %}">
+            <i class="far fa-square"></i>
+            <span>Order Create</span>
+          </a>
+        </li>
+
+        <li class="menu-header">Master Data</li>
+        <li class="dropdown">
+          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Master Data</span></a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link" href="{% url "buyer_list" %}">Buyer</a></li>
+            <li><a class="nav-link" href="">Unit</a></li>
+            <li><a class="nav-link" href="">Machine</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+      {% endif %}
+
+
+
+    </aside>
+  </div>

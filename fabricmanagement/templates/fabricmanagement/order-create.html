@@ -1,0 +1,310 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Order Create
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Order Create
+{% endblock page_title %}
+
+
+{% block page_body %}
+
+<div class="card">
+    <div class="card-header bg-primary">
+        <h4 style="color: white;">Order Details</h4>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Buyer Name</label>
+                <input type='text' class="form-control  text-center" id="buyer_name" name="buyer_name">
+            </div>
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Order NO</label>
+                <input type='text' class="form-control  text-center" id="order_no" name="order_no">
+            </div>
+
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Order Type</label>
+                <select class="form-control text-center" id="order-type-select" name="order_type">
+                    <option value="1">Bulk</option>
+                    <option value="2">Development</option>
+                    <option value="3">Sample</option>
+                </select>
+            </div>
+            
+
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Total Body QTY(KG)</label>
+                <input class="form-control  text-center" id="total-order-qty" name="total_order_qty" value="0" readonly="">
+            </div>
+
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Issue Date</label>
+                <input type="date" class="form-control text-center" id="start-date" name="start_date">
+
+            </div>
+            <div class="form-group fixed-input-width col">
+                <label class="col-form-label text-uppercase">Shipment Date</label>
+                <input type="date" class="form-control text-center" id="end-date" name="end_date">
+            </div>
+            
+        
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+
+    <div class="card-body">
+        <div class="row">
+            <form method="post" action="{% url 'order_create' %}">
+                {% csrf_token %}
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered text-center" id="body-fabric-item-table" width="100%">
+                        <thead>
+                            <tr class="bg-primary">
+                                <th style='color:white'>Style</th>
+                                <th style='color:white'>COLOR</th>
+                                <th style='color:white'>FABRIC DESIGN</th>
+                                <th style='color:white'>GSM</th>
+                                <th style='color:white'>FINISH DIA</th>
+                                <th style='color:white'>MACHINE DIA</th>
+                                <th style='color:white'>MACHINE TYPE</th>
+                                <th style='color:white'>ORDER QY.(KG)</th>
+                                <th style='color:white'>NOTE</th>
+                                <th style='color:white'>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="d-flex justify-content-between">
+                                    <div class="form-group fixed-input-width">
+                                        <input type="text" class="text-center form-control style mr-2" value="" required placeholder="Style">
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="color" type="text" class="form-control text-center color" placeholder="Color">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="fabric_design" type="text" class="form-control text-center fabric_design" placeholder="Fabric Design">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="gsm" type="text" class="form-control text-center gsm" placeholder="GSM">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="finish_dia" type="text" class="form-control text-center finish_dia" placeholder="Finish Dia">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="machine_dia" type="text" class="form-control text-center machine_dia" placeholder="Machine Dia">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="machine_type" type="text" class="form-control text-center machine_type" placeholder="Machine Type">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="order_qty" type="text" class="form-control text-center order_qty" placeholder="Order Qty">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group fixed-input-width">
+                                        <input name="comment" type="text" class="form-control text-center comment" placeholder="TYPE COMMENTS">
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm bg-primary mx-2 float-left add-body-fabric-item-value">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group fixed-input-width col-md-12 mt-3 pl-4 text-center">
+                    <button type="button" class="btn btn-sm bg-primary mx-2 float-right save-order">
+                        <i class="fas fa-plane">Save</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+   
+{% endblock page_body %}
+
+{% block js %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;  // Ensure this element exists
+        
+        function updateTotalOrderQty() {
+            let totalQty = 0;
+            const qtyInputs = document.querySelectorAll('#body-fabric-item-table .order_qty');
+            qtyInputs.forEach(input => {
+                const qty = parseFloat(input.value) || 0;
+                totalQty += qty;
+            });
+            document.querySelector('#total-order-qty').value = totalQty.toFixed(2); 
+        }
+    
+        document.querySelector('#body-fabric-item-table tbody').addEventListener('click', function(event) {
+            if (event.target && event.target.matches('.add-body-fabric-item-value')) {
+                var tableBody = document.querySelector('#body-fabric-item-table tbody');
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                   <td class="d-flex justify-content-between">
+                        <div class="form-group fixed-input-width">
+                            <input type="text" class="text-center form-control style mr-2" value="" required placeholder="Style">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="color" type="text" class="form-control text-center color" placeholder="Color">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="fabric_design" type="text" class="form-control text-center fabric_design" placeholder="Fabric Design">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="gsm" type="text" class="form-control text-center gsm" placeholder="GSM">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="finish_dia" type="text" class="form-control text-center finish_dia" placeholder="Finish Dia">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="machine_dia" type="text" class="form-control text-center machine_dia" placeholder="Machine Dia">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="machine_type" type="text" class="form-control text-center machine_type" placeholder="Machine Type">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="order_qty" type="text" class="form-control text-center order_qty" placeholder="Order Qty">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fixed-input-width">
+                            <input name="comment" type="text" class="form-control text-center comment" placeholder="TYPE COMMENTS">
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm mx-2 bg-primary float-left add-body-fabric-item-value">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow);
+            }
+        });
+    
+        document.querySelector('#body-fabric-item-table').addEventListener('input', function(event) {
+            if (event.target && event.target.matches('.order_qty')) {
+                updateTotalOrderQty();
+            }
+        });
+    
+        document.querySelector('.save-order').addEventListener('click', function() {
+            const orderItems = [];
+            document.querySelectorAll('#body-fabric-item-table tbody tr').forEach(row => {
+                const item = {
+                    style: row.querySelector('.style').value,
+                    color: row.querySelector('.color').value,
+                    fabric_design: row.querySelector('.fabric_design').value,
+                    gsm: row.querySelector('.gsm').value,
+                    finish_dia: row.querySelector('.finish_dia').value,
+                    machine_dia: row.querySelector('.machine_dia').value,
+                    machine_type: row.querySelector('.machine_type').value,
+                    order_qty: row.querySelector('.order_qty').value,
+                    comment: row.querySelector('.comment').value,
+                };
+                orderItems.push(item);
+            });
+        
+            const startDate = document.querySelector('#start-date').value;
+            const endDate = document.querySelector('#end-date').value;
+        
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            
+            fetch('{% url 'save_order' %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    buyer_name: document.querySelector('#buyer_name').value,
+                    order_no: document.querySelector('#order_no').value,
+                    order_type: document.querySelector('#order-type-select').value,
+                    total_order_qty: document.querySelector('#total-order-qty').value,
+                    start_date: startDate,
+                    end_date: endDate,
+                    items: orderItems
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order saved successfully!',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '{% url "order_list" %}';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error saving order',
+                        text: 'There was an issue saving the order. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+        updateTotalOrderQty();
+    });
+</script>
+
+{% endblock js %}

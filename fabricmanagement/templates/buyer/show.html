@@ -1,0 +1,57 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Buyer 
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Buyer Show
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ buyer.name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Email:</strong> {{ buyer.email }}
+            </div>
+            <div class="col-md-6">
+                <strong>Address:</strong> {{ buyer.address }}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ buyer.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ buyer.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'buyer_list' %}" class="btn btn-secondary">Back to Buyer List</a>
+        <a href="{% url 'buyer_update' buyer.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'buyer_delete' buyer.pk %}" class="d-inline-block" id="deleteForm{{ buyer.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ buyer.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

@@ -1,0 +1,99 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+    Order List
+{% endblock title %}
+
+{% block css %}
+    <!-- Additional CSS if needed -->
+{% endblock css %}
+
+{% block page_title %}
+    Order List
+{% endblock page_title %}
+
+{% block page_body %}
+
+<div class="card">
+    <div class="card-header">
+        <form method="GET">
+            <div class="row">
+                <div class="col mb-2">
+                    <input type="text" name="buyer_name" class="form-control form-control-lg" placeholder="Filter by Buyer" value="{{ request.GET.buyer_name }}">
+                </div>
+
+                <div class="col mb-2">
+                    <input type="text" name="order_no" class="form-control form-control-lg" placeholder="Filter by Order" value="{{ request.GET.order_no }}">
+                </div>
+
+                <div class="col mb-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{% url 'order_list' %}" class="btn btn-success mx-2">Clear Filters</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-md">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Buyer Name</th>
+                        <th>Order No</th>
+                        <th>Order Qty</th>
+                        <th>Issue Date</th>
+                        <th>Shipment Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in order_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ order.buyer_name }}</td>
+                            <td>{{ order.order_no }}</td>
+                            <td>{{ order.total_order_qty }}</td>
+                            <td>{{ order.issue_date }}</td>
+                            <td>{{ order.shipment_date }}</td>
+                            <td>
+                                <a href="{% url "order_detail" order.id %}" class="btn btn-info btn-sm d-inline-block">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            
+                                <form method="post" action="{% url 'order_delete' order.id %}" class="d-inline-block" id="deleteForm{{ order.id }}">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ order.id }});">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                                
+                            </td>
+                            
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No orders found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      
+        {% include "accounts/master/pagination.html" %}
+
+        <div class="text-center">
+            <a href="{% url 'order_create' %}" class="btn btn-info btn-lg align-items-center">
+                <i class="fas fa-plus-circle fs-3 me-2"></i> 
+            </a>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+{% endblock js %}

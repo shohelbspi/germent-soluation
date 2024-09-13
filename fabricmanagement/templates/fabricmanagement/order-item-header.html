@@ -1,0 +1,38 @@
+<table class="table table-bordered">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th class='text-white'>Style </th>
+            <th class='text-white'>Color</th>
+            <th class='text-white'>Fabric Design</th>
+            <th class='text-white'>GSM</th>
+            <th class='text-white'>Finish DIA</th>
+            <th class='text-white'>Machine DIA</th>
+            <th class='text-white'>Machine Type</th>
+            <th class='text-white'>Order Qty</th>
+            <th class='text-white'>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order_items %}
+        <tr>
+            <td>{{ item.style }}</td>
+            <td>{{ item.color }}</td>
+            <td>{{ item.fabric_design }}</td>
+            <td>{{ item.gsm }}</td>
+            <td>{{ item.finish_dia }}</td>
+            <td>{{ item.machine_dia }}</td>
+            <td>{{ item.machine_type }}</td>
+            <td>{{ item.order_item_qty }}</td>
+            <td>
+                <a href="{% url "add_yarn" item.id %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Yarn
+                </a>
+
+                <a href="" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i>KnitCard
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+    Django
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block page_title %}
+    Order List
+{% endblock page_title %}
+
+{% block page_body %}
+
+<h2>Order Information</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th class='text-white'>Buyer</th>
+            <th class='text-white'>Order No</th>
+            <th class='text-white'>Total Order Qty</th>
+            <th class='text-white'>Issue Date</th>
+            <th class='text-white'>Delivery Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object.buyer_name }}</td>
+            <td>{{ object.order_no }}</td>
+            <td>{{ object.total_order_qty }}</td>
+            <td>{{ object.issue_date }}</td>
+            <td>{{ object.shipment_date }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Order Item Information</h2>
+    {% include "fabricmanagement/order-item-header.html" %}
+
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
