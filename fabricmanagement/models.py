@@ -57,9 +57,30 @@ class Unit(models.Model):
             models.Index(fields=['name']),
         ]
         
+class MachineType(models.Model):
+    type = models.CharField(unique=True,max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='machine_type_created'
+    )
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='machine_type_updated'
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['type']),
+        ]
+        
 
 # Order Related Model
-
 class Order(models.Model):
     buyer_name = models.CharField(max_length=255, db_index=True)
     order_no = models.CharField(max_length=255, db_index=True)

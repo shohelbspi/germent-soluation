@@ -1,15 +1,14 @@
 {% extends "accounts/master/base.html" %}
 
 {% block title %}
-    buyer List
+Machine Type
 {% endblock title %}
 
 {% block css %}
-    <!-- Additional CSS if needed -->
 {% endblock css %}
 
 {% block page_title %}
-    buyer List
+Machine Type List
 {% endblock page_title %}
 
 {% block page_body %}
@@ -18,14 +17,14 @@
     <div class="card-header">
         <form method="GET">
             <div class="row">
+            
                 <div class="col mb-2">
-                    <input type="text" name="name" class="form-control form-control-lg" placeholder="Filter by Name" value="{{ request.GET.name }}">
+                    <input type="text" name="type" class="form-control form-control-lg" placeholder="Filter by Type" value="{{ request.GET.type }}">
                 </div>
-
 
                 <div class="col mb-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{% url 'buyer_list' %}" class="btn btn-success mx-2">Clear Filters</a>
+                    <a href="{% url 'machine_type_list' %}" class="btn btn-success mx-2">Clear Filters</a>
                 </div>
             </div>
         </form>
@@ -35,45 +34,41 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bbuyered table-md">
+            <table class="table table-bunited table-md">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Buyer Name</th>
-                        <th>Eamil</th>
-                        <th>Address</th>
+                        <th>Machine Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for buyer in buyer_list %}
+                    {% for machine in machine_types %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ buyer.name }}</td>
-                            <td>{{ buyer.email }}</td>
-                            <td>{{ buyer.address }}</td>
+                            <td>{{ machine.type }}</td>
 
                             <td>
-                                <a href="{% url "buyer_detail" buyer.id %}" class="btn btn-info btn-sm d-inline-block">
+                                <a href="{% url "machine_type_detail" machine.id %}" class="btn btn-info btn-sm d-inline-block">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{% url "buyer_update" buyer.id %}" class="btn btn-primary btn-sm d-inline-block">
+                                <a href="{% url "machine_type_update" machine.id %}" class="btn btn-primary btn-sm d-inline-block">
                                     <i class="fas fa-pen"></i>
                                 </a>
                             
-                                <form method="post" action="{% url 'buyer_delete' buyer.id %}" class="d-inline-block" id="deleteForm{{ buyer.id }}">
+                                <form method="post" action="{% url 'machine_type_delete' machine.id %}" class="d-inline-block" id="deleteForm{{ machine.id }}">
                                     {% csrf_token %}
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ buyer.id }});">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ machine.id }});">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
                                 
-                            </td>
+                            </td> 
                             
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center">No buyers found.</td>
+                            <td colspan="7" class="text-center">No Machine Type found.</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -84,7 +79,7 @@
         {% include "accounts/master/pagination.html" %}
 
         <div class="text-center">
-            <a href="{% url 'buyer_create' %}" class="btn btn-info btn-lg align-items-center">
+            <a href="{% url 'machine_type_create' %}" class="btn btn-info btn-lg align-items-center">
                 <i class="fas fa-plus-circle fs-3 me-2"></i> 
             </a>
         </div>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Buyer,Unit
+from .models import Buyer,Unit,MachineType
 
 class BuyerForm(forms.ModelForm):
     class Meta:
@@ -29,4 +29,13 @@ class UnitForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Unit name'}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Unit Location'}),
+        }
+
+class MachineTypeForm(forms.ModelForm):
+    class Meta:
+        model = MachineType
+        fields = ['type']
+        widgets = {
+            'type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Machine Type'}),
+
         }

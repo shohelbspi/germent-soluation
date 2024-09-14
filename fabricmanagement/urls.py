@@ -18,6 +18,13 @@ urlpatterns = [
     path('unit/<int:pk>/update/', MasterDataView.UnitUpdateView.as_view(), name='unit_update'),
     path('unit/<int:pk>/delete/', MasterDataView.UnitDeleteView.as_view(), name='unit_delete'),
 
+    path('machine-type/', MasterDataView.MachineTypeListView.as_view(), name='machine_type_list'),
+    path('machine-type/create/', MasterDataView.MachineTypeCreateView.as_view(), name='machine_type_create'),
+
+    path('machine-type/<int:pk>/', MasterDataView.MachineTypeDetailView.as_view(), name='machine_type_detail'),
+    path('machine-type/<int:pk>/update/', MasterDataView.MachineTypeUpdateView.as_view(), name='machine_type_update'),
+    path('machine-type/<int:pk>/delete/', MasterDataView.MachineTypeDeleteView.as_view(), name='machine_type_delete'),
+
 
 
     path('',views.OrderCreate,name='order_create'),

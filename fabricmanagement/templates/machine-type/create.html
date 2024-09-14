@@ -1,7 +1,7 @@
 {% extends "accounts/master/base.html" %}
 
 {% block title %}
-Buyer 
+Machine Type 
 {% endblock title %}
 
 {% block css %}
@@ -9,7 +9,7 @@ Buyer
 
 
 {% block page_title %}
-Buyer Create
+Machine Type Create
 {% endblock page_title %}
 
 
@@ -20,21 +20,12 @@ Buyer Create
         {% csrf_token %}
         <div class="row">
             <div class="form-group col-6">
-                <label for="username">Buyer Name</label>
-                {{ form.name }}
+                <label for="type">Machine Type Name</label>
+                {{ form.type }}
             </div>
-            <div class="form-group col-6">
-                <label for="email">Email</label>
-                {{ form.email }}
-            </div>
+
         </div>
 
-        <div class="row">
-            <div class="form-group col-6">
-                <label class='font-bold' for="address">Address</label>
-                    {{ form.address }}
-            </div>
-        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg btn-block">
                 Save

@@ -1,0 +1,50 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Machine Type 
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Machine Type Show
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ machine_type.type }}</h2>
+    </div>
+    <div class="card-body">
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ machine_type.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ machine_type.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'machine_type_list' %}" class="btn btn-secondary">Back to M/Type List</a>
+        <a href="{% url 'machine_type_update' machine_type.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'machine_type_delete' machine_type.pk %}" class="d-inline-block" id="deleteForm{{ machine_type.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ machine_type.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+
