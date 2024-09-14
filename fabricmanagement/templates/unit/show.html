@@ -1,0 +1,57 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Unit 
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Unit Show
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ unit.name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Type:</strong> {{ unit.type }}
+            </div>
+            <div class="col-md-6">
+                <strong>Location:</strong> {{ unit.location }}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ unit.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ unit.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'unit_list' %}" class="btn btn-secondary">Back to Unit List</a>
+        <a href="{% url 'unit_update' unit.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'unit_delete' unit.pk %}" class="d-inline-block" id="deleteForm{{ unit.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ unit.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

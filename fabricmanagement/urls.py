@@ -5,11 +5,19 @@ from fabricmanagement import views,MasterDataView
 urlpatterns = [
 
     #Master Data
+
     path('buyer/', MasterDataView.BuyerListView.as_view(), name='buyer_list'),
-    path('buyer/<int:pk>/', MasterDataView.BuyerDetailView.as_view(), name='buyer_detail'),
     path('buyer/create/', MasterDataView.BuyerCreateView.as_view(), name='buyer_create'),
+    path('buyer/<int:pk>/', MasterDataView.BuyerDetailView.as_view(), name='buyer_detail'),
     path('buyer/<int:pk>/update/', MasterDataView.BuyerUpdateView.as_view(), name='buyer_update'),
     path('buyer/<int:pk>/delete/', MasterDataView.BuyerDeleteView.as_view(), name='buyer_delete'),
+
+    path('unit/', MasterDataView.UnitListView.as_view(), name='unit_list'),
+    path('unit/create/', MasterDataView.UnitCreateView.as_view(), name='unit_create'),
+    path('unit/<int:pk>/', MasterDataView.UnitDetailView.as_view(), name='unit_detail'),
+    path('unit/<int:pk>/update/', MasterDataView.UnitUpdateView.as_view(), name='unit_update'),
+    path('unit/<int:pk>/delete/', MasterDataView.UnitDeleteView.as_view(), name='unit_delete'),
+
 
 
     path('',views.OrderCreate,name='order_create'),

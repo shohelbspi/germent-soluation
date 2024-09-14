@@ -38,7 +38,7 @@ class Unit(models.Model):
     type = models.CharField(max_length=50)
     location = models.CharField(max_length=120)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(null=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
