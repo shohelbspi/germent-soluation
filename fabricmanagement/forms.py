@@ -39,3 +39,32 @@ class MachineTypeForm(forms.ModelForm):
             'type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Machine Type'}),
 
         }
+
+
+from django import forms
+from .models import Machine
+
+class MachineForm(forms.ModelForm):
+    class Meta:
+        model = Machine
+        fields = [
+            'machine_no', 'unit', 'machine_name', 'machine_brand', 'machine_gauge',
+            'machine_type', 'machine_dia', 'no_of_feeder', 'rotation_per_minute', 
+            'accuracy', 'production_capacity_per_day', 'is_active'
+        ]
+        
+        widgets = {
+            'machine_no': forms.NumberInput(attrs={'class': 'form-control'}),
+            'unit': forms.Select(attrs={'class': 'form-control'}),
+            'machine_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'machine_brand': forms.TextInput(attrs={'class': 'form-control'}),
+            'machine_gauge': forms.TextInput(attrs={'class': 'form-control'}),
+            'machine_type': forms.Select(attrs={'class': 'form-control'}),
+            'machine_dia': forms.NumberInput(attrs={'class': 'form-control'}),
+            'no_of_feeder': forms.NumberInput(attrs={'class': 'form-control'}),
+            'rotation_per_minute': forms.NumberInput(attrs={'class': 'form-control'}),
+            'accuracy': forms.NumberInput(attrs={'class': 'form-control'}),
+            'production_capacity_per_day': forms.NumberInput(attrs={'class': 'form-control'}),
+
+            'is_active': forms.Select(choices=[(True, 'Yes'), (False, 'No')], attrs={'class': 'form-control'}),
+        }

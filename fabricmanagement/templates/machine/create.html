@@ -1,0 +1,97 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Machine
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Machine Create
+{% endblock page_title %}
+
+
+{% block page_body %}
+
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="username">Machine No</label>
+                {{ form.machine_no }}
+            </div>
+            <div class="form-group col-6">
+                <label for="machine_name">Machine Name</label>
+                {{ form.machine_name }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Machine Brand</label>
+                    {{ form.machine_brand }}
+            </div>
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Unit</label>
+                    {{ form.unit }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Machine Type</label>
+                    {{ form.machine_type }}
+            </div>
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Machine Dia</label>
+                    {{ form.machine_dia }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Machine Gauge</label>
+                    {{ form.machine_gauge }}
+            </div>
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Feeder </label>
+                    {{ form.no_of_feeder }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Rotation</label>
+                    {{ form.rotation_per_minute }}
+            </div>
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Accuracy</label>
+                    {{ form.accuracy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Production Capacity</label>
+                    {{ form.production_capacity_per_day }}
+            </div>
+            <div class="form-group col-6">
+                <label class='font-bold' for="address">Active Status</label>
+                    {{ form.is_active }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                Save
+            </button>
+        </div>
+    </form>
+  </div>
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

@@ -2,7 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from django.views.generic import ListView,DeleteView,DetailView
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order, OrderItem 
+from .models import Order, OrderItem ,Buyer
 import json
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,7 +29,7 @@ def save_order(request):
         items = data.get('items')
 
         order = Order.objects.create(
-            buyer_name=buyer_name,
+            buyer_id=buyer_name,
             order_no=order_no,
             order_type=order_type,
             total_order_qty=total_order_qty,
@@ -94,3 +94,17 @@ def add_yarn(request,id):
     return render(request,'fabricmanagement/add-yarn.html',{
         'item': order_item,
     })
+
+
+
+def buyer_search(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        query = request.GET.get('q', '') 
+        if query:
+            buyers = Buyer.objects.filter(name__icontains=query)[:10] 
+        else:
+            buyers = Buyer.objects.all()[:10]  # Return the first 10 buyers when no search query
+        buyer_list = [{'id': buyer.id, 'text': buyer.name} for buyer in buyers]  # Format data for Select2
+        return JsonResponse({'results': buyer_list})
+    
+    return JsonResponse({'results': []})

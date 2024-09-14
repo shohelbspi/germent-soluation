@@ -56,6 +56,10 @@ class Unit(models.Model):
         indexes = [
             models.Index(fields=['name']),
         ]
+    
+    def __str__(self):
+        return self.name 
+    
         
 class MachineType(models.Model):
     type = models.CharField(unique=True,max_length=50)
@@ -78,14 +82,41 @@ class MachineType(models.Model):
         indexes = [
             models.Index(fields=['type']),
         ]
-        
+    def __str__(self):
+        return self.type 
+
+class Machine(models.Model):
+    machine_no                  = models.PositiveIntegerField(unique=True)
+    unit                        = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    machine_name                = models.CharField(max_length=50)
+    machine_brand               = models.CharField(max_length=50)
+    machine_gauge               = models.CharField(max_length=50)
+    machine_type                = models.ForeignKey(MachineType, on_delete=models.CASCADE)
+    machine_dia                 = models.PositiveIntegerField()
+    no_of_feeder                = models.PositiveIntegerField()  
+    rotation_per_minute         = models.PositiveIntegerField()
+    accuracy                    = models.DecimalField(max_digits=5, decimal_places=2)  
+    production_capacity_per_day = models.DecimalField(max_digits=10, decimal_places=2)
+    is_maintenance              = models.BooleanField(default=False)
+    is_active                   = models.BooleanField(default=True)
+    loaded_status               = models.BooleanField(default=False)
+    created_at                  = models.DateTimeField(auto_now_add=True)
+    updated_at                  = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['machine_no']),
+            models.Index(fields=['is_active']),
+        ]
 
 # Order Related Model
 class Order(models.Model):
-    buyer_name = models.CharField(max_length=255, db_index=True)
+    buyer = models.ForeignKey(Buyer,on_delete=models.CASCADE)
     order_no = models.CharField(max_length=255, db_index=True)
     order_type = models.CharField(max_length=255, db_index=True)
     total_order_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_knitcard_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_production_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     issue_date = models.DateField(db_index=True)
     shipment_date = models.DateField(db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -111,6 +142,12 @@ class OrderItem(models.Model):
     machine_dia = models.CharField(max_length=233, db_index=True)
     machine_type = models.CharField(max_length=233, db_index=True)
     order_item_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_assign_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True)
+    total_produce_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True)
+    total_store_recv_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True)
+    total_store_del_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True)
+    total_challan_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0,null=True)
+    note = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

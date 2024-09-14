@@ -1,0 +1,86 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Machine - {{ machine.machine_no }}
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Buyer Show - {{ machine.machine_no }}
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>Machine NO : {{ machine.machine_no }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Machine Name:</strong> {{ machine.machine_name }}
+            </div>
+            <div class="col-md-6">
+                <strong>Machine Brand:</strong> {{ machine.machine_brand }}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Unit:</strong> {{ machine.unit }}
+            </div>
+            <div class="col-md-6">
+                <strong>Machine Type:</strong> {{ machine.machine_type }}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Machine Dia:</strong> {{ machine.machine_dia }}
+            </div>
+            <div class="col-md-6">
+                <strong>Machine Gauge:</strong> {{ machine.machine_gauge }}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Production Qty:</strong> {{ machine.production_capacity_per_day }}
+            </div>
+            <div class="col-md-6">
+                <strong>Active Status :</strong> 
+                {% if machine.is_active %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ machine.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ machine.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'machine_list' %}" class="btn btn-secondary">Back to Machine List</a>
+        <a href="{% url 'machine_update' machine.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'machine_delete' machine.pk %}" class="d-inline-block" id="deleteForm{{ machine.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ machine.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

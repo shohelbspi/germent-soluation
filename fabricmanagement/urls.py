@@ -20,11 +20,16 @@ urlpatterns = [
 
     path('machine-type/', MasterDataView.MachineTypeListView.as_view(), name='machine_type_list'),
     path('machine-type/create/', MasterDataView.MachineTypeCreateView.as_view(), name='machine_type_create'),
-
     path('machine-type/<int:pk>/', MasterDataView.MachineTypeDetailView.as_view(), name='machine_type_detail'),
     path('machine-type/<int:pk>/update/', MasterDataView.MachineTypeUpdateView.as_view(), name='machine_type_update'),
     path('machine-type/<int:pk>/delete/', MasterDataView.MachineTypeDeleteView.as_view(), name='machine_type_delete'),
 
+
+    path('machine/', MasterDataView.MachineListView.as_view(), name='machine_list'),
+    path('machine/create/', MasterDataView.MachineCreateView.as_view(), name='machine_create'),
+    path('machine/<int:pk>/', MasterDataView.MachineDetailView.as_view(), name='machine_detail'),
+    path('machine/<int:pk>/update/', MasterDataView.MachineUpdateView.as_view(), name='machine_update'),
+    path('machine/<int:pk>/delete/', MasterDataView.MachineDeleteView.as_view(), name='machine_delete'),
 
 
     path('',views.OrderCreate,name='order_create'),
@@ -34,6 +39,11 @@ urlpatterns = [
     path('order/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
 
     path('add-yarn/<int:id>/', views.add_yarn, name='add_yarn'),
+
+
+    # select2
+
+    path('buyer/search/', views.buyer_search, name='buyer_search'),
 
 
 ]

@@ -53,7 +53,7 @@
                     {% for order in order_list %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ order.buyer_name }}</td>
+                            <td>{{ order.buyer.name }}</td>
                             <td>{{ order.order_no }}</td>
                             <td>{{ order.total_order_qty }}</td>
                             <td>{{ order.issue_date }}</td>

@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from fabricmanagement.models import Buyer,Unit,MachineType
-from fabricmanagement.forms import BuyerForm,UnitForm,MachineTypeForm
+from fabricmanagement.models import Buyer,Unit,MachineType,Machine
+from fabricmanagement.forms import BuyerForm,UnitForm,MachineTypeForm,MachineForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -182,5 +182,58 @@ class MachineTypeDeleteView(DeleteView):
     success_url = reverse_lazy('machine_type_list')
 
 
+# Machine
+
+class MachineListView(LoginRequiredMixin,ListView):
+    model = Machine
+    template_name = 'machine/index.html'
+    paginate_by = 10
+    login_url = reverse_lazy('admin_singin')
+
+    def get_queryset(self):
+
+        filter_machine_no = self.request.GET.get('machine_no', '')
+
+        queryset = Machine.objects.all()
+
+        if filter_machine_no:
+            queryset = queryset.filter(machine_no__icontains=filter_machine_no)
+
+        return queryset
+
+class MachineCreateView(CreateView):
+    model = Machine
+    form_class = MachineForm
+    template_name = 'machine/create.html'
+    success_url = reverse_lazy('machine_list') 
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        response = super().form_valid(form)
+        
+        messages.success(self.request, "Machine created successfully!")
+        
+        return response
+
+class MachineDetailView(DetailView):
+    model = Machine
+    template_name = 'machine/show.html'
+
+
+class MachineUpdateView(UpdateView):
+    model = Machine
+    form_class = MachineForm
+    template_name = 'machine/edit.html'
+
+    success_url = reverse_lazy('machine_list') 
+    
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user  
+        messages.success(self.request, f"Machine {form.instance.machine_no} was updated successfully!")  
+        return super().form_valid(form)
 
     
+class MachineDeleteView(DeleteView):
+    model = Machine
+    success_url = reverse_lazy('machine_list')
+
