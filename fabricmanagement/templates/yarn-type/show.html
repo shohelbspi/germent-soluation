@@ -1,0 +1,50 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Yarn Type  - {{yarn_type.yarn_type}}
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Yarn Type Show - {{yarn_type.yarn_type}}
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ yarn_type.yarn_type }}</h2>
+    </div>
+    <div class="card-body">
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ yarn_type.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ yarn_type.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'yarn_type_list' %}" class="btn btn-secondary">Back to Y/Type List</a>
+        <a href="{% url 'yarn_type_update' yarn_type.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'yarn_type_delete' yarn_type.pk %}" class="d-inline-block" id="deleteForm{{ yarn_type.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ yarn_type.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

@@ -109,6 +109,32 @@ class Machine(models.Model):
             models.Index(fields=['is_active']),
         ]
 
+class YarnCount(models.Model):
+    yarn_count = models.CharField(max_length=70,unique=True,null=False,blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['yarn_count'])
+        ]
+    def __str__(self):
+        return self.yarn_count
+    
+class YarnType(models.Model):
+    yarn_type = models.CharField(max_length=70,unique=True,null=False,blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['yarn_type'])
+        ]
+    def __str__(self):
+        return self.yarn_type
+    
+
+
 # Order Related Model
 class Order(models.Model):
     buyer = models.ForeignKey(Buyer,on_delete=models.CASCADE)
@@ -158,3 +184,24 @@ class OrderItem(models.Model):
             models.Index(fields=['updated_at']),
      
         ]
+
+
+class YarnOrder(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE, related_name='yarn_orders')
+
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name='yarn_orders')
+
+    yarn_count_id = models.ForeignKey(YarnCount, on_delete=models.SET_NULL, null=True, related_name='yarn_orders')
+    
+    yarn_type_id = models.ForeignKey(YarnType,on_delete=models.SET_NULL, null=True, related_name='yarn_orders')
+    yarn_brand = models.CharField(max_length=50)
+    yarn_lot = models.CharField(max_length=50)
+    stitch_length = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    percentage = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    total_yarn_receive_qty = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    total_yarn_knitted_qty = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+

@@ -1,0 +1,32 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+    Edit Yarn Type - {{ yarn_type.yarn_type}}
+{% endblock title %}
+
+{% block page_title %}
+    Edit  Yarn Type - {{ yarn_type.yarn_type }}
+{% endblock page_title %}
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>Edit  Yarn Type - {{ yarn_type.yarn_type }}</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}  
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{% url 'yarn_type_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock page_body %}
+
+{% block js %}
+    <script>
+    </script>
+{% endblock js %}

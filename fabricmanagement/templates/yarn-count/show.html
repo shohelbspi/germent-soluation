@@ -1,0 +1,50 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Yarn Count -{{yarn_count.yarn_count}}
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Yarn Count Show -{{yarn_count.yarn_count}}
+{% endblock page_title %}
+
+
+{% block page_body %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ yarn_count.yarn_count }}</h2>
+    </div>
+    <div class="card-body">
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <strong>Created At:</strong> {{ yarn_count.created_at }}
+            </div>
+            <div class="col-md-6">
+                <strong>Updated At:</strong> {{ yarn_count.updated_at }}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'yarn_count_list' %}" class="btn btn-secondary">Back to M/Type List</a>
+        <a href="{% url 'yarn_count_update' yarn_count.pk %}" class="btn btn-primary">Edit</a>
+        <form method="post" action="{% url 'yarn_count_delete' yarn_count.pk %}" class="d-inline-block" id="deleteForm{{ yarn_count.pk }}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ yarn_count.pk }});">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

@@ -1,0 +1,42 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+Yarn Type 
+{% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block page_title %}
+Yarn Type Create
+{% endblock page_title %}
+
+
+{% block page_body %}
+
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="yarn_type">Yarn Type</label>
+                {{ form.yarn_type }}
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                Save
+            </button>
+        </div>
+    </form>
+  </div>
+{% endblock page_body %}
+
+{% block js %}
+
+{% endblock js %}
+
+

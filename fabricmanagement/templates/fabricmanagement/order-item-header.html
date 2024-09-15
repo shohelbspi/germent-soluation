@@ -24,7 +24,7 @@
             <td>{{ item.machine_type }}</td>
             <td>{{ item.order_item_qty }}</td>
             <td>
-                <a href="{% url "add_yarn" item.id %}" class="btn btn-primary btn-sm">
+                <a href="{% url 'add_yarn' order.id item.id %}" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus"></i> Yarn
                 </a>
 

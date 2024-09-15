@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from fabricmanagement.models import Buyer,Unit,MachineType,Machine
-from fabricmanagement.forms import BuyerForm,UnitForm,MachineTypeForm,MachineForm
+from fabricmanagement.models import Buyer,Unit,MachineType,Machine,YarnCount,YarnType
+from fabricmanagement.forms import BuyerForm,UnitForm,MachineTypeForm,MachineForm,YarnCountForm,YarnTypeForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -236,4 +236,119 @@ class MachineUpdateView(UpdateView):
 class MachineDeleteView(DeleteView):
     model = Machine
     success_url = reverse_lazy('machine_list')
+
+
+# Yarn Count
+
+class YarnCountListView(LoginRequiredMixin,ListView):
+    model = YarnCount
+    template_name = 'yarn-count/index.html'
+    context_object_name = 'yarn_count'
+    paginate_by = 10
+    login_url = reverse_lazy('admin_singin')
+
+    def get_queryset(self):
+
+        filter_count = self.request.GET.get('yarn_count', '')
+
+        queryset = YarnCount.objects.all()
+
+        if filter_count:
+            queryset = queryset.filter(yarn_count__icontains=filter_count)
+
+        return queryset
+    
+class YarnCountCreateView(CreateView):
+    model = YarnCount
+    form_class = YarnCountForm
+    template_name = 'yarn-count/create.html'
+    success_url = reverse_lazy('yarn_count_list') 
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        response = super().form_valid(form)
+        
+        messages.success(self.request, "Yarn Count created successfully!")
+        
+        return response
+    
+class YarnCountDetailView(DetailView):
+    model = YarnCount
+    template_name = 'yarn-count/show.html'
+    context_object_name = 'yarn_count'
+
+
+class YarnCountUpdateView(UpdateView):
+    model = YarnCount
+    form_class = YarnCountForm
+    template_name = 'yarn-count/edit.html'
+    context_object_name = 'yarn_count'
+
+    success_url = reverse_lazy('yarn_count_list') 
+    
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user  
+        messages.success(self.request, f"{form.instance.yarn_count} was updated successfully!")  
+        return super().form_valid(form)
+
+class YarnCountDeleteView(DeleteView):
+    model = YarnCount
+    success_url = reverse_lazy('yarn_count_list')
+
+# Yarn Type
+
+class YarnTypeListView(LoginRequiredMixin,ListView):
+    model = YarnType
+    template_name = 'yarn-type/index.html'
+    context_object_name = 'yarn_type'
+    paginate_by = 10
+    login_url = reverse_lazy('admin_singin')
+
+    def get_queryset(self):
+
+        filter_type = self.request.GET.get('yarn_type', '')
+
+        queryset = YarnType.objects.all()
+
+        if filter_type:
+            queryset = queryset.filter(yarn_type__icontains=filter_type)
+
+        return queryset
+    
+class YarnTypeCreateView(CreateView):
+    model = YarnType
+    form_class = YarnTypeForm
+    template_name = 'yarn-type/create.html'
+    success_url = reverse_lazy('yarn_type_list') 
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        response = super().form_valid(form)
+        
+        messages.success(self.request, "Yarn Type created successfully!")
+        
+        return response
+    
+class YarnTypeDetailView(DetailView):
+    model = YarnType
+    template_name = 'yarn-type/show.html'
+    context_object_name = 'yarn_type'
+
+
+class YarnTypeUpdateView(UpdateView):
+    model = YarnType
+    form_class = YarnTypeForm
+    template_name = 'yarn-type/edit.html'
+    context_object_name = 'yarn_type'
+
+    success_url = reverse_lazy('yarn_type_list') 
+    
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user  
+        messages.success(self.request, f"{form.instance.yarn_type} was updated successfully!")  
+        return super().form_valid(form)
+
+class YarnTypeDeleteView(DeleteView):
+    model = YarnType
+    success_url = reverse_lazy('yarn_type_list')
 

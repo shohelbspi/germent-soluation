@@ -24,26 +24,39 @@ urlpatterns = [
     path('machine-type/<int:pk>/update/', MasterDataView.MachineTypeUpdateView.as_view(), name='machine_type_update'),
     path('machine-type/<int:pk>/delete/', MasterDataView.MachineTypeDeleteView.as_view(), name='machine_type_delete'),
 
-
     path('machine/', MasterDataView.MachineListView.as_view(), name='machine_list'),
     path('machine/create/', MasterDataView.MachineCreateView.as_view(), name='machine_create'),
     path('machine/<int:pk>/', MasterDataView.MachineDetailView.as_view(), name='machine_detail'),
     path('machine/<int:pk>/update/', MasterDataView.MachineUpdateView.as_view(), name='machine_update'),
     path('machine/<int:pk>/delete/', MasterDataView.MachineDeleteView.as_view(), name='machine_delete'),
 
+    path('yarn-count/', MasterDataView.YarnCountListView.as_view(), name='yarn_count_list'),
+    path('yarn-count/create/', MasterDataView.YarnCountCreateView.as_view(), name='yarn_count_create'),
+    path('yarn-count/<int:pk>/', MasterDataView.YarnCountDetailView.as_view(), name='yarn_count_detail'),
+    path('yarn-count/<int:pk>/update/', MasterDataView.YarnCountUpdateView.as_view(), name='yarn_count_update'),
+    path('yarn-count/<int:pk>/delete/', MasterDataView.YarnCountDeleteView.as_view(), name='yarn_count_delete'),
+
+    path('yarn-type/', MasterDataView.YarnTypeListView.as_view(), name='yarn_type_list'),
+    path('yarn-type/create/', MasterDataView.YarnTypeCreateView.as_view(), name='yarn_type_create'),
+    path('yarn-type/<int:pk>/', MasterDataView.YarnTypeDetailView.as_view(), name='yarn_type_detail'),
+    path('yarn-type/<int:pk>/update/', MasterDataView.YarnTypeUpdateView.as_view(), name='yarn_type_update'),
+    path('yarn-type/<int:pk>/delete/', MasterDataView.YarnTypeDeleteView.as_view(), name='yarn_type_delete'),
+
 
     path('',views.OrderCreate,name='order_create'),
     path('save-order/', views.save_order, name='save_order'),  
+    path('save-yarn/', views.save_yarn, name='save_yarn'),  
     path('order-list/',views.order_list.as_view(),name='order_list'),
     path('order/<int:pk>/delete/', views.order_delete.as_view(), name='order_delete'),
     path('order/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
 
-    path('add-yarn/<int:id>/', views.add_yarn, name='add_yarn'),
+    path('add-yarn/<int:order_id>/<int:item_id>/', views.add_yarn_view, name='add_yarn'),
 
 
     # select2
-
     path('buyer/search/', views.buyer_search, name='buyer_search'),
+    path('yarn-count-list', views.yarn_count_list, name='yc_list'),
+    path('yarn-type-list', views.yarn_type_list, name='yt_list'),
 
 
 ]

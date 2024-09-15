@@ -17,7 +17,7 @@
 <table class="table table-bordered">
     <thead>
         <tr class="bg-primary text-white">
-            <th class='text-white'>Style </th>
+            <th class='text-white'>Style</th>
             <th class='text-white'>Color</th>
             <th class='text-white'>Fabric Design</th>
             <th class='text-white'>GSM</th>
@@ -37,84 +37,219 @@
             <td>{{ item.machine_dia }}</td>
             <td>{{ item.machine_type }}</td>
             <td>{{ item.order_item_qty }}</td>
-
         </tr>
     </tbody>
 </table>
 
-
 <h4 class='mt-4'>Order Yarn Information</h4>
 
 <div class="card">
-
     <div class="card-body">
-            <form method="post" action="">
-                {% csrf_token %}
+        <form method="post" action="">
+            {% csrf_token %}
+            
+            <input type="hidden" name="order_id" id="order_id" value="{{ order.id }}">
+            <input type="hidden" name="order_item_id" id="order_item_id" value="{{ item.id }}">
 
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center" id="yarn-information-table" width="100%">
-                        <thead>
-                            <tr class="bg-primary">
-                                <th style="color:white">Yarn Count</th>
-                                <th style="color:white">Yarn Type</th>
-                                <th style="color:white">Yarn Brand</th>
-                                <th style="color:white">Yarn Lot</th>
-                                <th style="color:white">SL</th>
-                                <th style="color:white">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody >
-                            <tr>
-                                <td>
-                                    <div class="form-group fixed-input-width">
-                                        <input type="text" name='yarn_count' id='yarn_count' class="form-control text-center mt-2" value="" required placeholder="Yarn Count">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group fixed-input-width">
-                                        <input name="yarn_type" id='yarn_type' type="text" class="form-control text-center mt-2" placeholder="Yarn Type">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group fixed-input-width">
-                                        <input name="yarn_brand" id='yarn_brand' type="text" class="form-control text-center mt-2" placeholder="Yarn Brand">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group fixed-input-width">
-                                        <input name="yarn_lot" id='yarn_lot' type="text" class="form-control text-center mt-2" placeholder="Yarn Lot">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group fixed-input-width">
-                                        <input name="sl" type="text" id='sl' class="form-control text-center mt-2" placeholder="SL">
-                                    </div>
-                                </td>
-                
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-primary mx-2">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="yarn-information-table" width="100%">
+                    <thead>
+                        <tr class="bg-primary">
+                            <th style="color:white">Yarn Count</th>
+                            <th style="color:white">Yarn Type</th>
+                            <th style="color:white">Yarn Brand</th>
+                            <th style="color:white">Yarn Lot</th>
+                            <th style="color:white">SL</th>
+                            <th style="color:white">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select class="form-control yarn_count" name="yarn_count" id="yarn_count" style="width:100%">
+                                    <option></option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control yarn_type" id="yarn_type" name="yarn_type" style="width:100%">
+                                    <option></option>
+                                </select>
+                            </td>
+                            <td>
+                                <input class="form-control yarn_brand" id="yarn_brand" name="yarn_brand" type="text" placeholder="Yarn Brand">
+                            </td>
+                            <td>
+                                <input class="form-control yarn_lot" id="yarn_lot" name="yarn_lot" type="text" placeholder="Yarn Lot">
+                            </td>
+                            <td>
+                                <input class="form-control sl" id="sl" name="sl" type="text" placeholder="SL">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary mx-2 add-row-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="form-group fixed-input-width col-md-12 mt-3 pl-4 text-center">
-                    <button type="button" class="btn btn-sm bg-primary mb-2 float-right save-yarn text-white">
-                        <i class="fas fa-save" style="font-size: 1.5em;"></i>
-                        <span class="mx-2" style="font-size: 1.5em;">Save</span> 
-                    </button>
-                </div>
-                
-            </form>
+            <div class="form-group fixed-input-width col-md-12 mt-3 pl-4 text-center">
+                <button type="button" class="btn btn-sm bg-primary mb-2 float-right save-yarn text-white">
+                    <i class="fas fa-save" style="font-size: 1.5em;"></i>
+                    <span class="mx-2" style="font-size: 1.5em;">Save</span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 {% endblock page_body %}
 
 {% block js %}
+
+<script>
+    
+    $(document).ready(function() {
+
+        function yarnCountSelect2(selector){
+            $(selector).select2({
+                placeholder: "Select A Yarn Count"
+            }).val(null).trigger('change');
+    
+            $.get('{% url "yc_list" %}', function(res) {
+                $(selector).find('option').remove();
+                $(selector).select2({
+                    data: res,
+                    placeholder: "Select A Yarn Count"
+                }).val(null).trigger('change');
+            });
+        }
+
+        function yarnTypeSelect2(selector){
+            $(selector).select2({
+                placeholder: "Select A Yarn Type"
+            }).val(null).trigger('change');
+    
+            $.get('{% url "yt_list" %}', function(res) {
+                $(selector).find('option').remove();
+                $(selector).select2({
+                    data: res,
+                    placeholder: "Select A Yarn Type"
+                }).val(null).trigger('change');
+            });
+        }
+
+        yarnCountSelect2('#yarn_count');
+        yarnTypeSelect2('#yarn_type');
+
+        function addNewRow() {
+            let newRow = `
+            <tr>
+                <td>
+                    <div class="form-group fixed-input-width">
+                        <select class="form-control yarn_count" name="yarn_count" style="width: 100%;">
+                            <option></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group fixed-input-width">
+                        <select class="form-control yarn_type" name="yarn_type" style="width: 100%;">
+                            <option></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group fixed-input-width">
+                        <input name="yarn_brand" type="text" class="form-control yarn_brand text-center mt-2" placeholder="Yarn Brand">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group fixed-input-width">
+                        <input name="yarn_lot" type="text" class="form-control text-center mt-2 yarn_lot" placeholder="Yarn Lot">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group fixed-input-width">
+                        <input name="sl" type="text" class="form-control text-center mt-2 sl" placeholder="SL">
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary mx-2 add-row-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            `;
+
+            $('#yarn-information-table tbody').append(newRow);
+
+            yarnCountSelect2('.yarn_count:last');
+            yarnTypeSelect2('.yarn_type:last');
+        }
+
+        $(document).on('click', '.add-row-btn', function() {
+            addNewRow();
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;  
+
+        document.querySelector('.save-yarn').addEventListener('click', function() {
+            const yarns = [];
+            document.querySelectorAll('#yarn-information-table tbody tr').forEach(row => {
+                const yarn = {
+                    yarn_count: row.querySelector('.yarn_count').value, 
+                    yarn_type: row.querySelector('.yarn_type').value, 
+                    yarn_brand: row.querySelector('.yarn_brand').value,  
+                    yarn_lot: row.querySelector('.yarn_lot').value,  
+                    yarn_sl: row.querySelector('.sl').value,  
+                };
+                yarns.push(yarn);
+            });
+
+            const orderId = document.getElementById('order_id').value;
+            const orderItemId = document.getElementById('order_item_id').value;
+
+            console.log(yarns);  
+
+            fetch('{% url "save_yarn" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken  
+                },
+                body: JSON.stringify({
+                    all_yarns: yarns,  
+                    order_id: orderId,  
+                    order_item_id: orderItemId 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Yarn saved successfully!',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = `{% url "order_detail" pk=0 %}`.replace('0', orderId);
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error saving yarn',
+                        text: 'There was an issue saving the yarn. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock js %}

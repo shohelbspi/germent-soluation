@@ -2,17 +2,21 @@ from django.shortcuts import render,get_object_or_404
 from django.views.generic import ListView,DeleteView,DetailView
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order, OrderItem ,Buyer
+from .models import Order, OrderItem ,Buyer,YarnCount,YarnType,YarnOrder
 import json
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+
+from django.utils.decorators import method_decorator
+
 
 
 
 # Create your views here.
 
 def OrderCreate(request):
-
     return render(request,'fabricmanagement/order-create.html')
 
 @csrf_exempt
@@ -88,14 +92,69 @@ class order_delete(DeleteView):
     model = Order
     success_url = reverse_lazy('order_list')
 
-def add_yarn(request,id):
-    order_item = get_object_or_404(OrderItem, id=id)
+def add_yarn_view(request, order_id, item_id):
+    order = get_object_or_404(Order, id=order_id)
+    item = get_object_or_404(OrderItem, id=item_id)
+    context = {
+        'order': order,
+        'item': item,
+    }
 
-    return render(request,'fabricmanagement/add-yarn.html',{
-        'item': order_item,
-    })
+    return render(request,'fabricmanagement/add-yarn.html',context)
+
+@csrf_exempt
+def save_yarn(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            order_id = data.get('order_id')
+            order_item_id = data.get('order_item_id')
+            yarns = data.get('all_yarns', [])
+
+            if not order_id or not order_item_id:
+                return JsonResponse({'success': False, 'error': 'Missing order_id or order_item_id'})
+
+            if not isinstance(yarns, list):
+                return JsonResponse({'success': False, 'error': 'Invalid yarn data'})
+
+            for yarn in yarns:
+                yarn_count_id = yarn.get('yarn_count')
+                yarn_type_id = yarn.get('yarn_type')
+
+                yarn_count_instance = YarnCount.objects.filter(id=yarn_count_id).first()
+                yarn_type_instance = YarnType.objects.filter(id=yarn_type_id).first()
+
+                if not yarn_count_instance:
+                    return JsonResponse({'success': False, 'error': f'Invalid yarn_count_id: {yarn_count_id}'})
+                if not yarn_type_instance:
+                    return JsonResponse({'success': False, 'error': f'Invalid yarn_type_id: {yarn_type_id}'})
+
+                YarnOrder.objects.create(
+                    order_id=order_id,
+                    order_item_id=order_item_id,
+                    yarn_count_id=yarn_count_instance,
+                    yarn_type_id=yarn_type_instance,
+                    yarn_brand=yarn.get('yarn_brand'),
+                    yarn_lot=yarn.get('yarn_lot'),
+                    stitch_length=yarn.get('stitch_length', None),
+                    percentage=yarn.get('percentage', None),
+                    total_yarn_receive_qty=yarn.get('total_yarn_receive_qty', None),
+                    total_yarn_knitted_qty=yarn.get('total_yarn_knitted_qty', None),
+                )
+
+            return JsonResponse({'success': True})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON format'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 
+# Select2
 
 def buyer_search(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -103,8 +162,25 @@ def buyer_search(request):
         if query:
             buyers = Buyer.objects.filter(name__icontains=query)[:10] 
         else:
-            buyers = Buyer.objects.all()[:10]  # Return the first 10 buyers when no search query
-        buyer_list = [{'id': buyer.id, 'text': buyer.name} for buyer in buyers]  # Format data for Select2
+            buyers = Buyer.objects.all()[:10] 
+        buyer_list = [{'id': buyer.id, 'text': buyer.name} for buyer in buyers]  
         return JsonResponse({'results': buyer_list})
     
     return JsonResponse({'results': []})
+
+
+
+def yarn_count_list(request):
+    yarn_counts = YarnCount.objects.all()
+    
+    data = [{"id": yarn_count.id, "text": yarn_count.yarn_count} for yarn_count in yarn_counts]
+    
+    return JsonResponse(data, safe=False)
+
+def yarn_type_list(request):
+    yarn_types = YarnType.objects.all()
+    
+    data = [{"id": yarn_type.id, "text": yarn_type.yarn_type} for yarn_type in yarn_types]
+    
+    return JsonResponse(data, safe=False)
+

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Buyer,Unit,MachineType
+from .models import Buyer,Unit,MachineType,Machine,YarnCount,YarnType
 
 class BuyerForm(forms.ModelForm):
     class Meta:
@@ -41,9 +41,6 @@ class MachineTypeForm(forms.ModelForm):
         }
 
 
-from django import forms
-from .models import Machine
-
 class MachineForm(forms.ModelForm):
     class Meta:
         model = Machine
@@ -67,4 +64,22 @@ class MachineForm(forms.ModelForm):
             'production_capacity_per_day': forms.NumberInput(attrs={'class': 'form-control'}),
 
             'is_active': forms.Select(choices=[(True, 'Yes'), (False, 'No')], attrs={'class': 'form-control'}),
+        }
+
+class YarnCountForm(forms.ModelForm):
+    class Meta:
+        model = YarnCount
+        fields = ['yarn_count']
+        widgets = {
+            'yarn_count': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Yarn Count'}),
+
+        }
+
+class YarnTypeForm(forms.ModelForm):
+    class Meta:
+        model = YarnType
+        fields = ['yarn_type']
+        widgets = {
+            'yarn_type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Yarn Type'}),
+
         }
