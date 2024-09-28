@@ -52,11 +52,16 @@ urlpatterns = [
 
     path('add-yarn/<int:order_id>/<int:item_id>/', views.add_yarn_view, name='add_yarn'),
 
+    path('add-knitcard/<int:id>/', views.add_knitcard_view, name='add_knitcard_view'),
+
 
     # select2
     path('buyer/search/', views.buyer_search, name='buyer_search'),
     path('yarn-count-list', views.yarn_count_list, name='yc_list'),
     path('yarn-type-list', views.yarn_type_list, name='yt_list'),
+
+    path('unit-select2-list', views.unit_select2, name='unit_select2'),
+    path('machine-select2-list', views.machine_select2, name='machine_select2'),
 
 
 ]

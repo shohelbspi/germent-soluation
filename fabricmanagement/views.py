@@ -2,16 +2,14 @@ from django.shortcuts import render,get_object_or_404
 from django.views.generic import ListView,DeleteView,DetailView
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order, OrderItem ,Buyer,YarnCount,YarnType,YarnOrder
+from .models import Order, OrderItem ,Buyer,YarnCount,YarnType,YarnOrder,Unit,Machine,KnitCard
 import json
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-
+from django.contrib import messages
 from django.utils.decorators import method_decorator
-
-
 
 
 # Create your views here.
@@ -66,7 +64,6 @@ class order_list(LoginRequiredMixin,ListView):
     login_url = reverse_lazy('admin_singin')
 
     def get_queryset(self):
-
         filter_buyer = self.request.GET.get('buyer_name', '')
         filter_order = self.request.GET.get('order_no', '')
 
@@ -76,7 +73,6 @@ class order_list(LoginRequiredMixin,ListView):
             queryset = queryset.filter(buyer_name__icontains=filter_buyer)
         if filter_order:
             queryset = queryset.filter(order_no__icontains=filter_order)
-
         return queryset
     
 class OrderDetailView(DetailView):
@@ -85,9 +81,14 @@ class OrderDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order_items'] = self.object.items.all()  
+        order_items = self.object.items.all()  
+        
+        for item in order_items:
+            item.yarn_exists = YarnOrder.objects.filter(order_item=item).exists() 
+                
+        context['order_items'] = order_items
         return context
-    
+
 class order_delete(DeleteView):
     model = Order
     success_url = reverse_lazy('order_list')
@@ -153,8 +154,31 @@ def save_yarn(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+def add_knitcard_view(request, id):
+    item = OrderItem.objects.get(id=id)
 
-# Select2
+    if request.method == 'POST':
+        # Capture form data
+        unit = request.POST.get('unit')
+        machine = request.POST.get('machine')
+        assign_qty = request.POST.get('assign_qty')
+        knitting_start = request.POST.get('knitting_start')
+        knitting_end = request.POST.get('knitting_end')
+        order_item_id = request.POST.get('order_item_id')
+
+        KnitCard.objects.create(
+            unit_id=unit,
+            machine_id=machine,
+            knitcard_qty=assign_qty,
+            knitting_start_date=knitting_start,
+            knitting_end_date=knitting_end,
+            order_item_id=order_item_id  # Save the order item ID
+        )
+
+        messages.success(request, "Knitcard created successfully!")
+
+    return render(request, 'fabricmanagement/add-knitcard.html', {'item': item})
+
 
 def buyer_search(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -181,6 +205,20 @@ def yarn_type_list(request):
     yarn_types = YarnType.objects.all()
     
     data = [{"id": yarn_type.id, "text": yarn_type.yarn_type} for yarn_type in yarn_types]
+    
+    return JsonResponse(data, safe=False)
+
+def unit_select2(request):
+    units = Unit.objects.all()
+    
+    data = [{"id": unit.id, "text": unit.name} for unit in units]
+    
+    return JsonResponse(data, safe=False)
+
+def machine_select2(request):
+    machines = Machine.objects.all()
+    
+    data = [{"id": machine.id, "text": machine.machine_no} for machine in machines]
     
     return JsonResponse(data, safe=False)
 

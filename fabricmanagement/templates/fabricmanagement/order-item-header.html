@@ -24,11 +24,14 @@
             <td>{{ item.machine_type }}</td>
             <td>{{ item.order_item_qty }}</td>
             <td>
+                {% if item.yarn_exists %}
+            {% else %}
                 <a href="{% url 'add_yarn' order.id item.id %}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Yarn
+                    <i class="fas fa-plus"></i> Add Yarn
                 </a>
+            {% endif %}
 
-                <a href="" class="btn btn-success btn-sm">
+                <a href="{% url "add_knitcard_view" item.id %}" class="btn btn-success btn-sm">
                     <i class="fas fa-plus"></i>KnitCard
                 </a>
             </td>

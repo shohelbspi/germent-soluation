@@ -1,0 +1,140 @@
+{% extends "accounts/master/base.html" %}
+
+{% block title %}
+    Knitcard
+{% endblock title %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block page_title %}
+    Knitcard Create
+{% endblock page_title %}
+
+{% block page_body %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th class='text-white'>Style</th>
+            <th class='text-white'>Color</th>
+            <th class='text-white'>Fabric Design</th>
+            <th class='text-white'>GSM</th>
+            <th class='text-white'>Finish DIA</th>
+            <th class='text-white'>Machine DIA</th>
+            <th class='text-white'>Machine Type</th>
+            <th class='text-white'>Order Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ item.style }}</td>
+            <td>{{ item.color }}</td>
+            <td>{{ item.fabric_design }}</td>
+            <td>{{ item.gsm }}</td>
+            <td>{{ item.finish_dia }}</td>
+            <td>{{ item.machine_dia }}</td>
+            <td>{{ item.machine_type }}</td>
+            <td>{{ item.order_item_qty }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h2>Knitcard Create Form</h2>
+
+<div class="card">
+    <div class="card-body">
+        
+        <form method="POST" action="{% url 'add_knitcard_view' item.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="order_item_id" value="{{ item.id }}">
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="unit">Unit/Channel</label>
+                    <select class="form-control unit" name="unit" id="unit" required>
+                        <option value="" disabled selected>Select a unit</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-6">
+                    <label for="machine">Machine</label>
+                    <select class="form-control machine" name="machine" id="machine" required>
+                        <option value="" disabled selected>Select a machine</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="assign-qty">Assign Qty (KG)</label>
+                    <input type="number" id="assign-qty" name="assign_qty" placeholder="Enter assigned quantity in KG" class="form-control" required>
+                </div>
+
+                <div class="form-group col-6">
+                    <label for="knitting-start">Knitting Start Date</label>
+                    <input type="date" id="knitting-start" name="knitting_start" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="knitting-end">Knitting End Date</label>
+                <input type="date" id="knitting-end" name="knitting_end" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock page_body %}
+
+
+
+{% block js %}
+
+<script>
+    
+    $(document).ready(function() {
+
+        function UnitSelect2(selector){
+            $(selector).select2({
+                placeholder: "Select A Unit"
+            }).val(null).trigger('change');
+    
+            $.get('{% url "unit_select2" %}', function(res) {
+                $(selector).find('option').remove();
+                $(selector).select2({
+                    data: res,
+                    placeholder: "Select A Unit"
+                }).val(null).trigger('change');
+            });
+        }
+
+        function MachineSelect2(selector){
+            $(selector).select2({
+                placeholder: "Select A Machine"
+            }).val(null).trigger('change');
+    
+            $.get('{% url "machine_select2" %}', function(res) {
+                $(selector).find('option').remove();
+                $(selector).select2({
+                    data: res,
+                    placeholder: "Select A Machine"
+                }).val(null).trigger('change');
+            });
+        }
+
+        UnitSelect2('#unit');
+        MachineSelect2('#machine');
+
+    });
+</script>
+
+{% endblock js %}
