@@ -53,6 +53,8 @@ urlpatterns = [
     path('add-yarn/<int:order_id>/<int:item_id>/', views.add_yarn_view, name='add_yarn'),
 
     path('add-knitcard/<int:id>/', views.add_knitcard_view, name='add_knitcard_view'),
+    path('knitcards/', views.KnitCardListView.as_view(), name='knitcard_list'),
+
 
 
     # select2

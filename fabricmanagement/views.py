@@ -179,6 +179,27 @@ def add_knitcard_view(request, id):
     return render(request, 'fabricmanagement/add-knitcard.html', {'item': item})
 
 
+class KnitCardListView(LoginRequiredMixin,ListView):
+    model = KnitCard
+    template_name = 'fabricmanagement/knitcard-list.html'
+    paginate_by = 10
+    login_url = reverse_lazy('admin_singin')
+    context_object_name = 'knitcards'
+
+    def get_queryset(self):
+
+        filter_knitcard_no = self.request.GET.get('knitcard_no', '')
+
+        queryset = KnitCard.objects.all()
+
+        if filter_knitcard_no:
+            queryset = queryset.filter(knitcard_no__icontains=filter_knitcard_no)
+
+        return queryset
+
+
+
+# Select 2
 def buyer_search(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         query = request.GET.get('q', '') 
