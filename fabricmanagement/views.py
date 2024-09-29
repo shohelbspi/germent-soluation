@@ -158,7 +158,6 @@ def add_knitcard_view(request, id):
     item = OrderItem.objects.get(id=id)
 
     if request.method == 'POST':
-        # Capture form data
         unit = request.POST.get('unit')
         machine = request.POST.get('machine')
         assign_qty = request.POST.get('assign_qty')
@@ -172,7 +171,7 @@ def add_knitcard_view(request, id):
             knitcard_qty=assign_qty,
             knitting_start_date=knitting_start,
             knitting_end_date=knitting_end,
-            order_item_id=order_item_id  # Save the order item ID
+            order_item_id=order_item_id 
         )
 
         messages.success(request, "Knitcard created successfully!")

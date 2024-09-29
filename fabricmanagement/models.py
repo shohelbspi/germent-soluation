@@ -207,9 +207,9 @@ class KnitCard(models.Model):
     order_item = models.ForeignKey(OrderItem, related_name="knitcards", on_delete=models.CASCADE)
     unit = models.ForeignKey(Unit, related_name="knitcards", on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, related_name="knitcards", on_delete=models.CASCADE)
-    knitcard_qty = models.DecimalField(max_digits=10, decimal_places=2)  # Quantity in this knitcard
-    produce_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Produced quantity in knitcard
-    knitcard_no = models.CharField(max_length=10, unique=True, blank=True)  # Sequential KnitCard number
+    knitcard_qty = models.DecimalField(max_digits=10, decimal_places=2)  
+    produce_qty = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
+    knitcard_no = models.CharField(max_length=10, unique=True, blank=True) 
     knitting_start_date = models.DateField()
     knitting_end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -218,16 +218,16 @@ class KnitCard(models.Model):
         return f"KnitCard No: {self.knitcard_no} for {self.order_item.item_name} - Qty: {self.knitcard_qty}"
 
     def save(self, *args, **kwargs):
-        if not self.knitcard_no:  # Only generate number if it doesn't already exist
-            last_knitcard = KnitCard.objects.all().order_by('id').last()  # Get the last KnitCard
+        if not self.knitcard_no:  
+            last_knitcard = KnitCard.objects.all().order_by('id').last()  
             if last_knitcard:
                 new_number = int(last_knitcard.knitcard_no) + 1
             else:
-                new_number = 1  # First knitcard, start with 1
-            self.knitcard_no = str(new_number).zfill(8)  # Add leading zeros
+                new_number = 1  
+            self.knitcard_no = str(new_number).zfill(8)  
         super(KnitCard, self).save(*args, **kwargs)
 
     class Meta:
         indexes = [
-            models.Index(fields=['knitcard_no']),  # Create an index on knitcard_no
+            models.Index(fields=['knitcard_no']),  
         ]
